@@ -1,0 +1,274 @@
+swagger: "2.0"
+info:
+  title: Course Manager
+  description: Course Manager Service will manage the learning plan for a given course
+  version: 1.0.0
+servers:
+  - url: http://localhost:8090/api/v1
+    description: Local Development Server
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+definitions:
+  EnrolledUser:
+    type: object
+    required:
+      - id
+      - name
+      - emailId
+      - role
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      emailId:
+        type: string
+      role:
+        type: string
+  UserCourseView:
+    type: object
+    required:
+      - id
+      - courseTitle
+      - courseDescription
+      - role
+    properties:
+      id:
+        type: string
+      courseTitle:
+        type: string
+      courseDescription:
+        type: string
+      role:
+        type: string
+  User:
+    type: object
+    required:
+      - id
+      - name
+      - organization
+      - emailId
+      - courses
+      - invitedCourses
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      organization:
+        type: string
+      email:
+        type: string
+      courses:
+        type: array
+        items:
+          $ref: "#/definitions/UserCourseView"
+  Course:
+    type: object
+    required:
+      - id
+      - courseTitle
+      - courseDescription
+      - toc
+      - members
+      - createdBy
+      - createdOn
+      - updatedAt
+      - recordedSessions
+      - terms
+      - isArchived
+    properties:
+      id:
+        type: string
+      courseTitle:
+        type: string
+      courseDescription:
+        type: string
+      toc:
+        type: string
+      termsAndConditions:
+        type: string
+      recordedSessions:
+        type: array
+        items:
+          type: string
+      members:
+        type: array
+        items:
+          $ref: "#/definitions/EnrolledUser"
+      createdOn: date
+      updatedAt: datetime
+      isArchived: boolean
+paths:
+  /ping:
+    get:
+      tags:
+        - ping
+      description: Checks if the server is running
+      produces:
+        - application/json
+    responses:
+      "200":
+        description: Checks if the server is running
+  /courses:
+    get:
+      tags:
+        - course
+      description: Returns all the courses from the system
+      security:
+        - OAuth2:
+          - read
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: A list of courses
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Course"
+    post:
+      tags:
+        - course
+      description: Creates a new course in the system
+      parameters:
+        - in: body
+          name: course
+          required: true
+          description: The course to create
+          schema:
+            type: object
+            $ref: "#/definitions/Course"
+      security:
+        - Oauth2:
+          - read
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: Creates a new course in the system
+          type: object
+          $ref: "#/definitions/Course"
+  /import/{courseId}/members:
+    put:
+      tags:
+        - import
+      description: Imports all the members into the course
+      parameters:
+        - in: path
+          name: courseId
+          type: string
+          required: true
+        - in: formData
+          name: membersfile
+          type: file
+          description: The file containing list of members
+  /courses/{courseId}:
+    get:
+      tags:
+        - course
+      description: Finds the course by courseId
+      parameters:
+        - in: path
+          name: courseId
+          type: string
+          required: true
+      security:
+        - OAuth2:
+          - read
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Finds the course by courseId
+          schema:
+            type: object
+            $ref: "#/definitions/Course"
+    put:
+      tags:
+        - course
+      description: Updates Course
+      parameters:
+        - in: path
+          name: courseId
+          type: string
+          description: The courseId of the course
+          required: true
+        - in: body
+          name: course
+          required: true
+          schema:
+            type: object
+            $ref: "#/definitions/Course"
+    delete:
+      tags:
+        - course
+      description: Deletes Course
+      parameter:
+        - in: path
+          name: courseId
+          type: string
+          description: The courseId of the course
+          required: true
+  /members:
+    get:
+      tags:
+        - member
+      description: Returns members from the system
+      produces:
+        - application/json
+      security:
+        - OAuth2:
+          - admin
+      responses:
+        "200":
+          description: Returns all the members from the system
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/User"
+  /members/{memberId}:
+    get:
+      tags:
+        - member
+      description: Finds member by memberId
+      produces:
+        - application/json
+      security:
+        - OAuth2:
+          - admin
+      responses:
+        "200":
+          description: Returns member by memberId
+          schema:
+            type: object
+            $ref: "#/definitions/User"
+    delete:
+      tags:
+        - member
+      description: Delete member by memberId
+      responses:
+        "204":
+          description: Deletes the member. No Content
+  /me:
+    get:
+      tags:
+        - me
+      description: Returns user details from the system
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Returns the complete details of the user from the system
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/User"
+        "401":
+          description: Not Authenticated
