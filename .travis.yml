@@ -9,7 +9,7 @@ node_js:
 #   - docker-compose logs mongosetup
 #   - sh scripts/createSymlinks.sh
 install:
-  - yarn run install
+  - yarn install
 script:
   - yarn lint
   - yarn test
