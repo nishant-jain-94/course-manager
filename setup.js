@@ -1,3 +1,5 @@
+/* eslint new-cap: ["error", { "newIsCap": false }] */
+
 const MongodbMemoryServer = require('mongodb-memory-server');
 const config = require('./app.config');
 

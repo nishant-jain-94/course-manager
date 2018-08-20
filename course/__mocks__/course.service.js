@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const courses = [
   {
     id: '507f191e810c19729de860ea',
@@ -19,25 +20,6 @@ const courses = [
     ],
   },
 ];
-
-const mockCourse = {
-  id: '507f191e810c19729de860eb',
-  courseTitle: 'Introduction to NodeJS',
-  courseDescription: 'This course is the introduction to the nodejs',
-  toc: '# Introduction to NodeJS',
-  termsAndConditions: 'These are the terms and conditions',
-  recordedSessions: [
-    'http://youtube.com/507f191e810c19729de860eb',
-  ],
-  members: [
-    {
-      id: '507f191e810c19729de860eb',
-      name: 'Fake Name',
-      emailId: 'fake@mail.com',
-      role: 'admin',
-    },
-  ],
-};
 
 const getCourses = jest.fn().mockReturnValue(courses);
 const getCourseById = jest.fn().mockReturnValue(courses[0]);
