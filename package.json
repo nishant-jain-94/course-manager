@@ -15,7 +15,8 @@
   },
   "scripts": {
     "start": "node ./bin/www",
-    "test": "./node_modules/.bin/jest --detectOpenHandles",
+    "test-unit": "./node_modules/.bin/jest unit -c jest.config.js --detectOpenHandles",
+    "test-integration": "./node_modules/.bin/jest int -c jest.config.js --detectOpenHandles",
     "lint": "./node_modules/.bin/eslint ."
   },
   "devDependencies": {

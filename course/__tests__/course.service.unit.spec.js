@@ -21,7 +21,6 @@ describe('Course Service', () => {
         ],
         members: [
           {
-            id: 'string',
             name: 'string',
             emailId: 'string',
             role: 'string',

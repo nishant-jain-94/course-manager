@@ -55,4 +55,4 @@ courseSchema.statics.createCourse = createCourse;
 courseSchema.statics.updateCourse = updateCourse;
 courseSchema.statics.deleteCourse = deleteCourse;
 
-module.exports = mongoose.model('Course', courseSchema);
+module.exports = mongoose.model('Course', courseSchema, 'courses');

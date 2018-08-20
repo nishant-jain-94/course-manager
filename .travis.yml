@@ -12,7 +12,8 @@ install:
   - yarn install
 script:
   - yarn lint
-  - yarn test
+  - yarn run test-unit
+  - yarn run test-integration
   - zip -qr course-manager.zip . -x *.git* node_modules/\*
 # after_success:
 #   - yarn run coverage
