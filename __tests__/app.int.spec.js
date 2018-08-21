@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const request = require('supertest');
 const should = require('should');
 const HttpStatus = require('http-status-codes');
