@@ -14,7 +14,11 @@ const getCourseById = async (req, res, next) => {
   try {
     const { courseId } = req.params;
     const foundCourse = await courseService.getCourseById(courseId);
-    res.status(HttpStatus.OK).json(foundCourse);
+    if (foundCourse) {
+      res.status(HttpStatus.OK).json(foundCourse);
+    } else {
+      res.status(404).json();
+    }
   } catch (error) {
     next(error);
   }
@@ -35,7 +39,11 @@ const updateCourse = async (req, res, next) => {
     const { courseId } = req.params;
     const courseToBeUpdatedWith = req.body;
     const updatedCourse = await courseService.updateCourse(courseId, courseToBeUpdatedWith);
-    res.status(HttpStatus.OK).json(updatedCourse);
+    if (updatedCourse) {
+      res.status(HttpStatus.OK).json(updatedCourse);
+    } else {
+      res.status(HttpStatus.NOT_FOUND).json();
+    }
   } catch (error) {
     next(error);
   }
@@ -45,7 +53,11 @@ const deleteCourse = async (req, res, next) => {
   try {
     const { courseId } = req.params;
     const deletedCourse = await courseService.deleteCourse(courseId);
-    res.status(HttpStatus.NO_CONTENT).json(deletedCourse);
+    if (deletedCourse) {
+      res.status(HttpStatus.NO_CONTENT).json();
+    } else {
+      res.status(HttpStatus.NOT_FOUND).json();
+    }
   } catch (error) {
     next(error);
   }

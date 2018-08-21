@@ -11,11 +11,11 @@ const courseSchema = new Schema({
     default: Date.now,
   },
   recordedSessions: [String],
-  members: {
+  members: [{
     name: String,
-    email: String,
+    emailId: String,
     role: String,
-  },
+  }],
   termsAndConditions: String,
   isArchived: {
     type: Boolean,
@@ -24,12 +24,12 @@ const courseSchema = new Schema({
 });
 
 const getCourses = async function getCourses() {
-  const courses = await this.find({});
+  const courses = await this.find({}).exec();
   return courses;
 };
 
 const getCourseById = async function getCourseById(courseId) {
-  const fetchedCourse = await this.findById(courseId);
+  const fetchedCourse = await this.findById(courseId).exec();
   return fetchedCourse;
 };
 
@@ -40,13 +40,21 @@ const createCourse = async function createCourse(course) {
 };
 
 const updateCourse = async function updateCourse(courseId, updatedCourseProperties) {
-  const updatedCourse = await this.update({ id: courseId }, updatedCourseProperties, { new: true });
+  const updatedCourse = await this.findOneAndUpdate(
+    { _id: courseId },
+    updatedCourseProperties,
+    { new: true, runValidators: true },
+  ).exec();
   return updatedCourse;
 };
 
 const deleteCourse = async function deleteCourse(courseId) {
-  const updatedCourse = await this.update({ id: courseId }, { isArchived: true }, { new: true });
-  return updatedCourse;
+  const deletedCourse = await this.findOneAndUpdate(
+    { _id: courseId },
+    { isArchived: true },
+    { new: true },
+  ).exec();
+  return deletedCourse;
 };
 
 courseSchema.statics.getCourses = getCourses;
@@ -55,4 +63,4 @@ courseSchema.statics.createCourse = createCourse;
 courseSchema.statics.updateCourse = updateCourse;
 courseSchema.statics.deleteCourse = deleteCourse;
 
-module.exports = mongoose.model('Course', courseSchema, 'courses');
+module.exports = mongoose.model('courses', courseSchema, 'courses');

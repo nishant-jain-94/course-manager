@@ -6,8 +6,8 @@ const errorHandler = require('../middlewares/errorHandler');
 
 const router = express.Router();
 
-router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: false }));
 
 router.get('/courses', courseController.getCourses);
 
