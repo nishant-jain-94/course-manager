@@ -171,11 +171,7 @@ describe('Course Controller Test', () => {
     });
 
     response.on('end', () => {
-      const responseData = JSON.parse(response._getData());
-      should.exist(responseData);
-      responseData.should.be.an.instanceOf(Object);
-      responseData.should.have.property('isArchived');
-      responseData.isArchived.should.be.exactly(true);
+      response.statusCode.should.be.exactly(204);
       done();
     });
 
